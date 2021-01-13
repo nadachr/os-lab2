@@ -90,56 +90,29 @@ func command_new(p string) {
 	if cpu[0] == "" && cpu[1] == "" {
 		cpu[0] = p
 		if prior[1] == "1" {
-			time1++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
+			time1++				
 		} else if prior[1] == "2" {
-			time2++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
+			time2++				
 		} else {
-			time3++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
+			time3++				
 		}
 	} else if cpu[0] == "" && cpu[1] != "" {
 		cpu[0] = p
 		if prior[1] == "1" {
-			time1++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
+			time1++				
 		} else if prior[1] == "2" {
-			time2++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
+			time2++				
 		} else {
-			time3++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
+			time3++				
 		}
 	} else if cpu[0] != "" && cpu[1] == "" {
 		cpu[1] = p
 		if prior[1] == "1" {
 			time1++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
 		} else if prior[1] == "2" {
 			time2++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
 		} else {
 			time3++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
 		}
 	} else {
 		insertQueue2(p)
@@ -148,82 +121,114 @@ func command_new(p string) {
 
 func command_terminate(i int) {
 	if cpu[i-1] != "" {
-		if ready1[0] != "" && time1 < 3 {
-			cpu[i-1] = deleteQueue(ready1)
-			time1++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
-		} else if (ready1[0] == "" && ready2[0] != "" && time2 < 3) || (time1 == 3 && time2 < 3) {
-			cpu[i-1] = deleteQueue(ready2)
-			time2++
-			time1 = 0
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
-		} else if (ready1[0] == "" && ready2[0] == "" && ready3[0] != "") || ((time1 == 3 || time1 == 0) && time2 == 3 && time3 < 3) {
+		if time1 < 12 {
+			if time1 == 3 || time1 == 7 || time1 == 11 {
+				time1++
+				fmt.Println("TER ->",time1)
+				fmt.Println(time2)
+				fmt.Println(time3)
+			} else {
+				cpu[i-1] = deleteQueue(ready1)
+				if cpu[i-1] == "" {
+					if ready2[0] != "" {
+						cpu[i-1] = deleteQueue(ready2)
+						time2++
+						fmt.Println("ter1.1 ->",time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					} else if ready2[0] == "" && ready3[0] != "" {
+						cpu[i-1] = deleteQueue(ready3)
+						time3++
+						fmt.Println("ter1.2 ->",time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					} else {
+						cpu[i-1] = ""
+						fmt.Println("ter1.3 ->",time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					}
+				} else {
+					time1++
+					fmt.Println("ter1 ->",time1)
+					fmt.Println(time2)
+					fmt.Println(time3)
+				}
+			}
+
+			if time1 == 4 || time1 == 8 || time1 == 12 {
+				cpu[i-1] = deleteQueue(ready2)
+				time2++
+				fmt.Println("ter2 ->",time1)
+				fmt.Println(time2)
+				fmt.Println(time3)
+
+				if cpu[i-1] == "" {
+					if ready1[0] != "" {
+						cpu[i-1] = deleteQueue(ready1)
+						time1++
+						fmt.Println("ter1.1 ->",time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					} else if ready1[0] == "" && ready3[0] != "" {
+						cpu[i-1] = deleteQueue(ready3)
+						time3++
+						fmt.Println("ter1.2 ->",time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					} else {
+						cpu[i-1] = ""
+						fmt.Println("ter1.3 ->",time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					}
+				}
+			}
+		} else if time2 == 3 {
 			cpu[i-1] = deleteQueue(ready3)
 			time3++
-			time2 = 0
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
+			time1=0
+			time2=0
+			fmt.Println("ter3 ->",time1)
+			fmt.Println(time2)
+			fmt.Println(time3)
+			if cpu[i-1] == "" {
+				if ready1[0] != "" {
+					cpu[i-1] = deleteQueue(ready1)
+					time1++
+					fmt.Println("ter1.1 ->",time1)
+					fmt.Println(time2)
+					fmt.Println(time3)
+				} else if ready1[0] == "" && ready2[0] != "" {
+					cpu[i-1] = deleteQueue(ready2)
+					time2++
+					fmt.Println("ter1.2 ->",time1)
+					fmt.Println(time2)
+					fmt.Println(time3)
+				} else {
+					cpu[i-1] = ""
+					fmt.Println("ter1.3 ->",time1)
+					fmt.Println(time2)
+					fmt.Println(time3)
+				}
+			}
 		} else {
 			cpu[i-1] = ""
+			fmt.Println("ter4 ->",time1)
+			fmt.Println(time2)
+			fmt.Println(time3)
 		}
 	}
 }
 
 func command_expire(i int) {
-	if (ready1[0] != "" && time1 < 3) || (ready1[0] != "" && ready2[0] == "" && ready3[0] == "") {
-		p := deleteQueue(ready1)
-		if p == "" {
-			return
-		}
-		insertQueue2(cpu[i-1])
-		cpu[i-1] = p
-		time1++
-		// fmt.Println(time1)
-		// fmt.Println(time2)
-		// fmt.Println(time3)
-	} else if (ready1[0] == "" && ready2[0] != "" && time2 < 3) || (ready2[0] != "" && time1 == 3 && time2 < 3) {
-		p := deleteQueue(ready2)
-		if p == "" {
-			return
-		}
-		insertQueue2(cpu[i-1])
-		cpu[i-1] = p
-		time2++
-		time1 = 0
-		// fmt.Println(time1)
-		// fmt.Println(time2)
-		// fmt.Println(time3)
-	} else if (ready1[0] == "" && ready2[0] == "" && ready3[0] != "") || (ready3[0] != "" && (time1 == 3 || time1 == 0) && time2 == 3 && time3 < 3) {
-		p := deleteQueue(ready3)
-		if p == "" {
-			return
-		}
-		insertQueue2(cpu[i-1])
-		cpu[i-1] = p
-		time3++
-		time1 = 0
-		time2 = 0
-		// fmt.Println(time1)
-		// fmt.Println(time2)
-		// fmt.Println(time3)
-	} else {
-		fmt.Println("NaN")
-	}
-}
-
-func command_expire2(i int) {
-	if time1 < 3 && time2 != 3 { //(ready1[0] == "" && time1 < 3) || (ready1[0] != "" && time1 < 3) || (ready1[0] != "" && ready2[0] == "" && ready3[0] == "")
+	if time1 < 12 {
 		p := deleteQueue(ready1)
 		if p == "" {
 			time1++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
+			fmt.Println("loops1", time1)
+			fmt.Println(time2)
+			fmt.Println(time3)
 			insertQueue2(cpu[i-1])
 			p := deleteQueue(ready1)
 			cpu[i-1] = p
@@ -232,164 +237,113 @@ func command_expire2(i int) {
 					p := deleteQueue(ready2)
 					insertQueue2(cpu[i-1])
 					cpu[i-1] = p
-					time2++
-					time1 = 0
-					// fmt.Println(time1)
-					// fmt.Println(time2)
-					// fmt.Println(time3)
+					fmt.Println("loops-1", time1)
+					fmt.Println(time2)
+					fmt.Println(time3)
 				} else if ready2[0] == "" && ready3[0] != "" {
-					p := deleteQueue(ready2)
+					p := deleteQueue(ready3)
 					insertQueue2(cpu[i-1])
 					cpu[i-1] = p
 					time3++
-					time2 = 0
-					time1 = 0
-					// fmt.Println(time1)
-					// fmt.Println(time2)
-					// fmt.Println(time3)
+					fmt.Println("loops-2", time1)
+					fmt.Println(time2)
+					fmt.Println(time3)
 				}
+			}
+
+			if time1 == 4 || time1 == 8 || time1 == 12 {
+				p := deleteQueue(ready2)
+				if p == "" {
+					time2++
+					fmt.Println("loops1.1", time1)
+					fmt.Println(time2)
+					fmt.Println(time3)
+					insertQueue2(cpu[i-1])
+					p := deleteQueue(ready2)
+					cpu[i-1] = p
+					if cpu[i-1] == "" {
+						if ready1[0] != "" {
+							p := deleteQueue(ready1)
+							insertQueue2(cpu[i-1])
+							cpu[i-1] = p
+							fmt.Println("loops1.1.1", time1)
+							fmt.Println(time2)
+							fmt.Println(time3)
+						} else if ready1[0] == "" && ready3[0] != "" {
+							p := deleteQueue(ready3)
+							insertQueue2(cpu[i-1])
+							cpu[i-1] = p
+							time3++
+							fmt.Println("loops1.1.2", time1)
+							fmt.Println(time2)
+							fmt.Println(time3)
+						}
+					}
+					return
+				}
+				insertQueue2(cpu[i-1])
+				cpu[i-1] = p
+				time2++
+				fmt.Println("loops1.2", time1)
+				fmt.Println(time2)
+				fmt.Println(time3)
 			}
 			return
 		}
 		insertQueue2(cpu[i-1])
 		cpu[i-1] = p
 		time1++
-		// fmt.Println(time1)
-		// fmt.Println(time2)
-		// fmt.Println(time3)
-	} else if time1 == 3 && time2 < 3 { //(ready1[0] == "" && ready2[0] != "" && time1 == 3 && time2 < 3 ) || (time1 == 3 && time2 < 3)
-		p := deleteQueue(ready2)
-		if p == "" {
-			time2++
-			time1 = 0
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
-			insertQueue2(cpu[i-1])
+		fmt.Println("loops2", time1)
+		fmt.Println(time2)
+		fmt.Println(time3)
+
+		if time1 == 4 || time1 == 8 || time1 == 12 {
 			p := deleteQueue(ready2)
-			cpu[i-1] = p
-			if cpu[i-1] == "" {
-				if ready1[0] != "" {
-					p := deleteQueue(ready1)
-					insertQueue2(cpu[i-1])
-					cpu[i-1] = p
-					time1++
-					// fmt.Println(time1)
-					// fmt.Println(time2)
-					// fmt.Println(time3)
-				} else if ready1[0] == "" && ready3[0] != "" {
-					p := deleteQueue(ready2)
-					insertQueue2(cpu[i-1])
-					cpu[i-1] = p
-					time3++
-					time2 = 0
-					time1 = 0
-					// fmt.Println(time1)
-					// fmt.Println(time2)
-					// fmt.Println(time3)
-				}
-			}
-			return
-		}
-		insertQueue2(cpu[i-1])
-		cpu[i-1] = p
-		time2++
-		time1 = 0
-		// fmt.Println(time1)
-		// fmt.Println(time2)
-		// fmt.Println(time3)
-	} else if time1 == 0 && time2 >= 3 && ready3[0] != "" { //(ready1[0] == "" && ready2[0] == "" && ready3[0] != "") || ((time1 == 3 || time1 == 0) && time2 == 3 && time3 < 3)
-		p := deleteQueue(ready3)
-		if p == "" {
-			time3++
-			time2 = 0
-			time1 = 0
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
-			insertQueue2(cpu[i-1])
-			p := deleteQueue(ready2)
-			cpu[i-1] = p
-			if cpu[i-1] == "" {
-				if ready1[0] != "" {
-					p := deleteQueue(ready1)
-					insertQueue2(cpu[i-1])
-					cpu[i-1] = p
-					time1++
-					// fmt.Println(time1)
-					// fmt.Println(time2)
-					// fmt.Println(time3)
-				} else if ready1[0] == "" && ready2[0] != "" {
-					p := deleteQueue(ready2)
-					insertQueue2(cpu[i-1])
-					cpu[i-1] = p
-					time2++
-					time1 = 0
-					// fmt.Println(time1)
-					// fmt.Println(time2)
-					// fmt.Println(time3)
-				}
-			}
-			return
-		}
-		insertQueue2(cpu[i-1])
-		cpu[i-1] = p
-		time3++
-		time1 = 0
-		time2 = 0
-		// fmt.Println(time1)
-		// fmt.Println(time2)
-		// fmt.Println(time3)
-	} else if time1 == 0 && time2 >= 3 && ready3[0] == "" {
-		time2 = 0
-		if ready1[0] != "" {
-			p := deleteQueue(ready1)
 			if p == "" {
-				time1++
-				// fmt.Println(time1)
-				// fmt.Println(time2)
-				// fmt.Println(time3)
+				time2++
+				fmt.Println("loops3", time1)
+				fmt.Println(time2)
+				fmt.Println(time3)
 				insertQueue2(cpu[i-1])
-				p := deleteQueue(ready1)
+				p := deleteQueue(ready2)
 				cpu[i-1] = p
 				if cpu[i-1] == "" {
-					if ready2[0] != "" {
-						p := deleteQueue(ready2)
+					if ready1[0] != "" {
+						p := deleteQueue(ready1)
 						insertQueue2(cpu[i-1])
 						cpu[i-1] = p
-						time2++
-						time1 = 0
-						// fmt.Println(time1)
-						// fmt.Println(time2)
-						// fmt.Println(time3)
-					} else if ready2[0] == "" && ready3[0] != "" {
-						p := deleteQueue(ready2)
+						fmt.Println("loops3.1", time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					} else if ready1[0] == "" && ready3[0] != "" {
+						p := deleteQueue(ready3)
 						insertQueue2(cpu[i-1])
 						cpu[i-1] = p
 						time3++
-						time2 = 0
-						time1 = 0
-						// fmt.Println(time1)
-						// fmt.Println(time2)
-						// fmt.Println(time3)
+						fmt.Println("loops3.2", time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
 					}
 				}
 				return
 			}
 			insertQueue2(cpu[i-1])
 			cpu[i-1] = p
-			time1++
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
-		} else if ready1[0] == "" && ready2[0] != "" {
-			p := deleteQueue(ready2)
+			time2++
+			fmt.Println("loops4", time1)
+			fmt.Println(time2)
+			fmt.Println(time3)
+		}
+	} else if time2 == 3 {
+		if ready3[0] != "" {
+			p := deleteQueue(ready3)
 			if p == "" {
-				time2++
+				time3++
 				time1 = 0
-				// fmt.Println(time1)
-				// fmt.Println(time2)
-				// fmt.Println(time3)
+				time2 = 0
+				fmt.Println("loops5", time1)
+				fmt.Println(time2)
+				fmt.Println(time3)
 				insertQueue2(cpu[i-1])
 				p := deleteQueue(ready2)
 				cpu[i-1] = p
@@ -397,17 +351,72 @@ func command_expire2(i int) {
 			}
 			insertQueue2(cpu[i-1])
 			cpu[i-1] = p
-			time2++
 			time1 = 0
-			// fmt.Println(time1)
-			// fmt.Println(time2)
-			// fmt.Println(time3)
+			time2 = 0
+			time3++
+			fmt.Println("loops5.1", time1)
+			fmt.Println(time2)
+			fmt.Println(time3)
+		} else {
+			if ready1[0] == "" {
+				p := deleteQueue(ready1)
+				insertQueue2(cpu[i-1])
+				cpu[i-1] = p
+				time1 = 0
+				time2 = 0
+				fmt.Println("loops5.2", time1)
+				fmt.Println(time2)
+				fmt.Println(time3)
+				if cpu[i-1] == "" {
+					if ready1[0] != "" {
+						p := deleteQueue(ready1)
+						insertQueue2(cpu[i-1])
+						cpu[i-1] = p
+						fmt.Println("loops5.2.1", time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					} else if ready1[0] == "" && ready3[0] != "" {
+						p := deleteQueue(ready3)
+						insertQueue2(cpu[i-1])
+						cpu[i-1] = p
+						fmt.Println("loops5.2.2", time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					}
+				}
+			} else if ready1[0] != "" && ready2[0] == "" {
+				p := deleteQueue(ready2)
+				insertQueue2(cpu[i-1])
+				cpu[i-1] = p
+				time1 = 0
+				time2 = 0
+				fmt.Println("loops5.3", time1)
+				fmt.Println(time2)
+				fmt.Println(time3)
+				if cpu[i-1] == "" {
+					if ready1[0] != "" {
+						p := deleteQueue(ready1)
+						insertQueue2(cpu[i-1])
+						cpu[i-1] = p
+						fmt.Println("loops5.3.1", time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					} else if ready1[0] == "" && ready3[0] != "" {
+						p := deleteQueue(ready3)
+						insertQueue2(cpu[i-1])
+						cpu[i-1] = p
+						fmt.Println("loops5.3.2", time1)
+						fmt.Println(time2)
+						fmt.Println(time3)
+					}
+				}
+			}
 		}
 	} else {
 		fmt.Println("NaN")
-		// fmt.Println(time1)
-		// fmt.Println(time2)
-		// fmt.Println(time3)
+		fmt.Println(time1)
+		fmt.Println(time2)
+		fmt.Println(time3)
 	}
 }
 
@@ -579,7 +588,7 @@ func main() {
 		case "expire":
 			if commandx[1] != "" {
 				index, _ := strconv.Atoi(commandx[1])
-				command_expire2(index)
+				command_expire(index)
 			} else {
 				fmt.Println("Syntax Error!!! Please choose the number of cpu that you want to expire, 1 or 2")
 			}
